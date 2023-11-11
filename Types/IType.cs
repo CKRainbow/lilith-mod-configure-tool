@@ -8,15 +8,17 @@ using LilithModConfigureTool.Types.Components;
 
 namespace LilithModConfigureTool.Types
 {
-    internal interface IType
+    public interface IType
     {
 
         string Path { get; }
 
-        List<IComponent>? Componenets { get; }
+        List<IComponent> Components { get; }
 
         XmlDocument Document { get; }
 
         void Parse();
+
+        void AddControl(EditWindow window);
     }
 }

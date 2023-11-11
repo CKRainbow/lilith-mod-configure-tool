@@ -5,6 +5,8 @@ using System.Xml;
 using System.Text;
 using System.Threading.Tasks;
 using LilithModConfigureTool.Types.Components.Attributes;
+using System.Windows.Controls;
+using System.Windows;
 
 namespace LilithModConfigureTool.Types.Components
 {
@@ -15,7 +17,7 @@ namespace LilithModConfigureTool.Types.Components
         Text,
         Int,
     }
-    internal interface IComponent
+    public interface IComponent
     {
         ComponentType Type { get; }
         
@@ -29,5 +31,7 @@ namespace LilithModConfigureTool.Types.Components
         object? Value { get; set; }
 
         void Parse(XmlNode node);
+
+        FrameworkElement GetControl();
     }
 }

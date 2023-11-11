@@ -62,13 +62,14 @@ namespace LilithModConfigureTool
                     type.AddFile(relativePath);
                 }
             }
-
+            UpdateTypeItems(CurrentType);
         }
 
 
         private void UpdateTypeItems(ModType? newType)
         {
             if (newType == null) return;
+            if (currentPath == null) return;
             var typeItemsListView = this.TypeItemsListView;
             typeItemsListView.ItemsSource = newType.ModFiles;
         }
@@ -133,7 +134,8 @@ namespace LilithModConfigureTool
             if (type.Name == "Item")
             {
                 var item = new ItemType(fullPath);
-                item.Parse();
+                EditWindow editWindow = new EditWindow(item);
+                editWindow.ShowDialog();
             }
 
         }

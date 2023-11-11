@@ -1,37 +1,45 @@
 ﻿using LilithModConfigureTool.Types.Components.Attributes;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using System.Xml;
 
 namespace LilithModConfigureTool.Types.Components
 {
-    internal class UseDescComponent : IComponent
+    internal class UseDescComponent : BaseComponent
     {
-        public UseDescComponent(string tag)
+        public UseDescComponent(string tag) : base(tag, subComponents: new List<IComponent>())
         {
-            Value = null;
-            Type = ComponentType.Text;
-            SubComponents = new List<IComponent>();
-            Attributes = null;
-            Optional = true;
-            Tag = tag;
         }
-        public ComponentType Type { get; }
 
-        public List<IComponent>? SubComponents { get; }
+        public override FrameworkElement GetControl()
+        {
+            StackPanel stackPanel = new();
+            Label label = new();
+            label.Content = Tag;
+            TextBox textBox = new();
+            textBox.SetBinding(
+                TextBox.TextProperty,
+                new Binding
+                {
+                    Source = Value,
+                    Path = new PropertyPath("."),
+                    Mode = BindingMode.TwoWay
+                }
+                );
+            stackPanel.Children.Add(label);
+            stackPanel.Children.Add(textBox);
+            return stackPanel;
+        }
 
-        public List<IAttribute>? Attributes { get; }
-
-        public bool Optional { get; }
-
-        public string Tag { get; }
-
-        public object? Value { get; set; }
-
-        public void Parse(XmlNode node)
+        public override void Parse(XmlNode node)
         {
             Value = node.InnerText;
         }

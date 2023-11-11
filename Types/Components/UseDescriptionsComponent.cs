@@ -5,33 +5,18 @@ using System.Linq;
 using System.Xml;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows;
 
 namespace LilithModConfigureTool.Types.Components
 {
-    internal class UseDescriptionsComponent : IComponent
+    internal class UseDescriptionsComponent : BaseComponent
     {
-        public UseDescriptionsComponent()
+        public UseDescriptionsComponent() : base("UseDescriptions", type:ComponentType.Container, subComponents: new List<IComponent>())
         {
-            Value = null;
-            Type = ComponentType.Container;
-            SubComponents = new List<IComponent>();
-            Attributes = null;
-            Optional = true;
-            Tag = "UseDescriptions";
         }
-        public ComponentType Type { get; }
 
-        public List<IComponent>? SubComponents { get; }
-
-        public List<IAttribute>? Attributes { get; }
-
-        public bool Optional { get; }
-
-        public string Tag { get; }
-
-        public object? Value { get; set; }
-
-        public void Parse(XmlNode node)
+        override public void Parse(XmlNode node)
         {
             XmlNode? selfUse = node.SelectSingleNode("//selfUse");
             XmlNode? otherUse = node.SelectSingleNode("//otherUse");
@@ -47,6 +32,17 @@ namespace LilithModConfigureTool.Types.Components
                 otherUseComponent.Parse(otherUse);
                 SubComponents?.Add(otherUseComponent);
             }
+        }
+
+        public override FrameworkElement GetControl()
+        {
+            if (SubComponents == null) return null;
+            WrapPanel wrapPanel = new WrapPanel();
+            foreach (var subComponent in SubComponents)
+            {
+                wrapPanel.Children.Add(subComponent.GetControl());
+            }
+            return wrapPanel;
         }
     }
 }
